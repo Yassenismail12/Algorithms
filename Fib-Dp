@@ -1,0 +1,74 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static long MOD = 1000000007;
+
+    static List<List<long>> MatrixMultiply(List<List<long>> matrix1, List<List<long>> matrix2)
+    {
+        int rows1 = matrix1.Count;
+        int cols1 = matrix1[0].Count;
+        int cols2 = matrix2[0].Count;
+
+        List<List<long>> result = new List<List<long>>(rows1);
+
+        for (int i = 0; i < rows1; i++)
+        {
+            result.Add(new List<long>(cols2));
+
+            for (int j = 0; j < cols2; j++)
+            {
+                result[i].Add(0);
+
+                for (int k = 0; k < cols1; k++)
+                {
+                    result[i][j] += matrix1[i][k] * matrix2[k][j];
+                    result[i][j] %= MOD;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    static List<List<long>> MatrixPower(List<List<long>> matrix, long n)
+    {
+        if (n <= 1)
+        {
+            return matrix;
+        }
+
+        List<List<long>> result = MatrixPower(matrix, n / 2);
+        result = MatrixMultiply(result, result);
+
+        if (n % 2 != 0)
+        {
+            result = MatrixMultiply(result, matrix);
+        }
+
+        return result;
+    }
+
+    static long Fibonacci(long n)
+    {
+        if (n <= 1)
+        {
+            return n;
+        }
+
+        List<List<long>> baseMatrix = new List<List<long>> { new List<long> { 1, 1 }, new List<long> { 1, 0 } };
+        List<List<long>> resultMatrix = MatrixPower(baseMatrix, n - 1);
+
+        return resultMatrix[0][0];
+    }
+
+    static void Main()
+    {
+        long n;
+        n = long.Parse(Console.ReadLine());
+
+        long result = Fibonacci(n);
+        Console.WriteLine(result);
+    }
+}
