@@ -4,19 +4,15 @@ class Program
 {
     static void Main()
     {
-        int[] arr = { 1, 2, 3, 4, 5, 6 };
+        int[] arr = { 1, 2, 3, 4,5, 6 };
         int target = 4;
-
-        Console.WriteLine("Array:");
-        PrintArray(arr);
-
-        int left = 0;
-        int right = arr.Length - 1;
+        int l = 0;
+        int r = arr.Length - 1;
         int index = -1;
 
-        while (left <= right)
+        while (l <= r)
         {
-            int mid = (left + right) / 2;
+            int mid = (l + r) / 2;
 
             if (arr[mid] == target)
             {
@@ -25,30 +21,22 @@ class Program
             }
             else if (arr[mid] < target)
             {
-                left = mid + 1;
+                l = mid + 1;
             }
             else
             {
-                right = mid - 1;
+                r = mid - 1;
             }
         }
 
         if (index != -1)
         {
-            Console.WriteLine("\nTarget found at index: " + index);
+            Console.WriteLine("\nFound!");
         }
         else
         {
             Console.WriteLine("\nTarget not found in the array.");
         }
-    }
-
-    static void PrintArray(int[] arr)
-    {
-        foreach (int num in arr)
-        {
-            Console.Write(num + " ");
-        }
-        Console.WriteLine();
+        
     }
 }
