@@ -34,37 +34,45 @@ class Program
         int[] leftArr = new int[n1];
         int[] rightArr = new int[n2];
 
-        Array.Copy(arr, left, leftArr, 0, n1);
-        Array.Copy(arr, mid + 1, rightArr, 0, n2);
-
-        int i = 0, j = 0, k = left;
-
-        while (i < n1 && j < n2)
+        for (int i = 0; i < n1; i++)
         {
-            if (leftArr[i] <= rightArr[j])
+            leftArr[i] = arr[left + i];
+        }
+
+        for (int j = 0; j < n2; j++)
+        {
+            rightArr[j] = arr[mid + 1 + j];
+        }
+
+        int k = left;
+        int p = 0, q = 0;
+
+        while (p < n1 && q < n2)
+        {
+            if (leftArr[p] <= rightArr[q])
             {
-                arr[k] = leftArr[i];
-                i++;
+                arr[k] = leftArr[p];
+                p++;
             }
             else
             {
-                arr[k] = rightArr[j];
-                j++;
+                arr[k] = rightArr[q];
+                q++;
             }
             k++;
         }
 
-        while (i < n1)
+        while (p < n1)
         {
-            arr[k] = leftArr[i];
-            i++;
+            arr[k] = leftArr[p];
+            p++;
             k++;
         }
 
-        while (j < n2)
+        while (q < n2)
         {
-            arr[k] = rightArr[j];
-            j++;
+            arr[k] = rightArr[q];
+            q++;
             k++;
         }
     }
