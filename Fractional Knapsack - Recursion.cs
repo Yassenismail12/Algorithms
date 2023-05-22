@@ -1,43 +1,63 @@
 using System;
 
-class Program
+public class Item
 {
-    static void Main()
+    public int Weight { get; set; }
+    public int Value { get; set; }
+
+    public Item(int weight, int value)
     {
-        int[] weights = { 10, 20, 30 };
-        int[] values = { 60, 100, 120 };
+        Weight = weight;
+        Value = value;
+    }
+}
+
+public class FractionalKnapsack
+{
+    public static double GetMaxValue(Item[] items, int capacity)
+    {
+        // Sort items by value-to-weight ratio in descending order
+        Array.Sort(items, (a, b) => (b.Value / b.Weight).CompareTo(a.Value / a.Weight));
+
+        double totalValue = 0;
+        int remainingCapacity = capacity;
+
+        foreach (Item item in items)
+        {
+            if (remainingCapacity == 0)
+                break;
+
+            // Take the whole item if it fits
+            if (item.Weight <= remainingCapacity)
+            {
+                totalValue += item.Value;
+                remainingCapacity -= item.Weight;
+            }
+            else
+            {
+                // Take a fraction of the item
+                double fraction = (double)remainingCapacity / item.Weight;
+                totalValue += fraction * item.Value;
+                break;
+            }
+        }
+
+        return totalValue;
+    }
+
+    public static void Main(string[] args)
+    {
+        // Example usage
+        Item[] items = new Item[]
+        {
+            new Item(10, 60),
+            new Item(20, 100),
+            new Item(30, 120)
+        };
+
         int capacity = 50;
 
-        double maxValue = FractionalKnapsack(weights, values, capacity);
-
+        double maxValue = GetMaxValue(items, capacity);
         Console.WriteLine("Maximum value: " + maxValue);
-    }
-
-    static double FractionalKnapsack(int[] weights, int[] values, int capacity)
-    {
-        int n = weights.Length;
-
-        return KnapsackRecursive(weights, values, capacity, n - 1);
-    }
-
-    static double KnapsackRecursive(int[] weights, int[] values, int capacity, int index)
-    {
-        // Base case: if no items left or no capacity remaining
-        if (index < 0 || capacity <= 0)
-            return 0;
-
-        // If the weight of the current item is more than the remaining capacity,
-        // skip the current item and move to the next item
-        if (weights[index] > capacity)
-            return KnapsackRecursive(weights, values, capacity, index - 1);
-
-        // Recursive calls:
-        // 1. Take the current item completely and reduce the capacity
-        double takeCurrent = values[index] + KnapsackRecursive(weights, values, capacity - weights[index], index - 1);
-        // 2. Skip the current item and move to the next item
-        double skipCurrent = KnapsackRecursive(weights, values, capacity, index - 1);
-
-        // Return the maximum value obtained by either taking or skipping the current item
-        return Math.Max(takeCurrent, skipCurrent);
     }
 }
